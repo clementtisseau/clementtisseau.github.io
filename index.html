@@ -1,11 +1,169 @@
 <!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>My blog</title>
-  </head>
-  <body>
-    <h1>Hello</h1>
-    <p>This is my site.</p>
-  </body>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Name</title>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #000000;
+      --link: #0000ee;
+      --muted: #444444;
+      --max-width: 720px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      background: var(--bg);
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Latin Modern Roman", "Computer Modern Serif", "CMU Serif", "Times New Roman", Times, serif;
+      font-size: 20px;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    main {
+      max-width: var(--max-width);
+      margin: 56px auto 80px;
+      padding: 0 24px;
+    }
+
+    h1, h2, p, ul {
+      margin-top: 0;
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 400;
+      line-height: 1.2;
+      margin-bottom: 18px;
+    }
+
+    h2 {
+      font-size: 1.2rem;
+      font-weight: 400;
+      margin-bottom: 14px;
+    }
+
+    p {
+      margin-bottom: 1rem;
+    }
+
+    a {
+      color: var(--link);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .intro {
+      margin-bottom: 42px;
+    }
+
+    .meta {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .meta li {
+      margin: 0 0 4px 0;
+    }
+
+    .label {
+      color: var(--muted);
+    }
+
+    .posts {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .posts li {
+      margin: 0 0 10px 0;
+    }
+
+    .date {
+      color: var(--muted);
+      margin-right: 10px;
+      white-space: nowrap;
+    }
+
+    footer {
+      margin-top: 48px;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    @media (max-width: 640px) {
+      body {
+        font-size: 18px;
+      }
+
+      main {
+        margin-top: 32px;
+        padding: 0 18px;
+      }
+
+      h1 {
+        font-size: 1.7rem;
+      }
+
+      .date {
+        display: block;
+        margin-bottom: 2px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header class="intro">
+      <h1>Your Name</h1>
+
+      <ul class="meta">
+        <li><span class="label">Job:</span> Your job title or short description</li>
+        <li><span class="label">X / Twitter:</span> <a href="https://x.com/yourhandle">@yourhandle</a></li>
+        <li><span class="label">Email:</span> <a href="mailto:you@example.com">you@example.com</a></li>
+        <li><span class="label">LinkedIn:</span> <a href="https://www.linkedin.com/in/yourname/">yourname</a></li>
+        <li><span class="label">GitHub:</span> <a href="https://github.com/yourusername">yourusername</a></li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>Thoughts</h2>
+      <ul class="posts">
+        <li>
+          <span class="date">2026-04-10</span>
+          <a href="posts/first-post.html">First post title</a>
+        </li>
+        <li>
+          <span class="date">2026-04-02</span>
+          <a href="posts/second-post.html">Second post title</a>
+        </li>
+        <li>
+          <span class="date">2026-03-25</span>
+          <a href="posts/third-post.html">Third post title</a>
+        </li>
+      </ul>
+    </section>
+
+    <footer>
+      Minimal website. No tracking. No cookies.
+    </footer>
+  </main>
+</body>
 </html>
