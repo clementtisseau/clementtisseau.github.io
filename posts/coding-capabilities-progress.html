@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Coding capabilities progress</title>
+  <link rel="stylesheet" href="coding-capabilities-progress.css" />
+</head>
+<body>
+  <main>
+    <article>
+      <header>
+        <h1>AI coding capabilities are becoming cheaper</h1>
+        <p class="meta">April 14, 2026</p>
+      </header>
+
+
+      <h1>Introduction</h1>
+      <p>In late 2025, Toby Ord argued in a <a href="https://www.tobyord.com/writing/hourly-costs-for-ai-agents">blog post</a> that there is a positive correlation between a model’s capabilities and its “minimal hourly cost.” On this view, the cost of solving a task with an LLM-based coding agent may increase supra-linearly with task duration.</p>
+      <p>This matters because Ord’s interpretation, if correct, would have important implications for how we think about the economics of increasingly capable AI systems. Yet the significance of the pattern is not obvious. It could indicate a general structural connection between capability and cost, under which increasingly capable models become disproportionately expensive to use on longer tasks. But it could also reflect contingent features of METR’s evaluations and of the current model market. The question, then, is how the observed relationship should actually be interpreted.</p>
+      <p>I argue that it should not be read too quickly as evidence that achieving higher levels of model capability systematically requires supra-linear increases in cost. The essay proceeds in four steps. First, it clarifies the definition of “minimal hourly cost” in the context of METR’s time-horizon evaluations. Second, it argues that raw capability is not the same as capability per dollar, and explains how this difference reflects the objectives for which frontier models are trained. Third, it shows that the set of models in METR’s evaluations is biased, making broad generalizations from the observed relationship hazardous. Fourth, it argues that, holding capability constant, prices are decreasing rather than increasing. Together, these points suggest that although new capability thresholds may first be crossed by models with higher hourly costs, the cost of reaching any given capability level is falling.</p>
+
+      <h1>From Time Horizons to Hourly Cost</h1>
+      <p>METR evaluates models in a simple agentic harness with a maximum token budget <em>X</em>, chosen so that performance has roughly plateaued. This lets METR estimate performance quantities such as the 50% and 80% time horizons, following the procedure described in <a href="https://metr.org/time-horizons/">METR’s write-up on time horizons</a>.</p>
+      <p>It is worth noting that the standard 50% time horizon is budget-independent: it is intended to measure the raw capabilities of a model rather than its capabilities at a particular budget constraint.</p>
+      <p>That said, one can define a budget-conditioned version of the 50% time horizon. Fix a budget <em>x</em> &lt; <em>X</em>, and treat every run whose generation cost exceeds <em>x</em> as a failure. One can now estimate the model’s 50% time horizon at budget <em>x</em>. Repeating this process for many values of <em>x</em> produces the family of curves shown below.</p>
+      <figure>
+        <img src="img/models_budget_comparison_GPT5_report.png" alt="METR GPT-5 report figure showing model budget comparison curves across time horizons and token budgets" />
+        <figcaption>From the <a href="https://evaluations.metr.org/gpt-5-report/">METR GPT-5 report</a>: “Comparison of time horizon achieved by token cost used for different models. Each model has a constant token budget, and the performance at each point is calculated by counting all unfinished runs as failures. Costs for o3 and GPT-5 are approximated using cost data for OpenAI o1.”</figcaption>
+      </figure>
+      <p>We can now define the hourly cost for tasks of duration <em>T</em> as</p>
+      <p class="formula">c(T) = x(T) / T × 60</p>
+      <p>where <em>T</em> is measured in minutes, and <em>x(T)</em> denotes the token budget at which the model’s budget-conditioned 50% time horizon equals T. The model’s “minimal hourly cost,” or Toby Ord's “sweet spot”, is the minimum value of <em>c(T)</em> across task durations.</p>
+
+
+
+      <h1>Why Highly Capable Models Can Still Be Inefficient</h1>
+      <p>Now that we have properly defined the "minimal hourly cost", it is worth noting that it is a measure of efficiency and not raw capabilities. Raw capabilities refer to what a language model can do in absolute terms. This should not be confused with efficiency, that refers to how much useful performance is obtained per token. A model may be highly capable yet require many tokens to reach a good answer. In that sense, raw capability describes the model’s ceiling of competence, not the economy with which that competence is expressed.</p>
+
+      <p>This distinction matters because frontier labs are often trying first and foremost to maximize capability. Given tight timelines and strong competitive pressure, this can easily lead to models that push the capability frontier without being optimized for efficiency. From that perspective, high cost at the frontier may simply reflect a focus on pushing absolute performance rather than optimizing performance per token.</p>
+<!--       Moreover, those models are precisely the ones METR is interested in testing, because they are at the frontier, and when a less expensive model with the same capabilities will be released, there will be a new frontier expensive model to evaluate. -->
+
+      <p>There are several reasons why organizations may rationally prioritize raw capability over immediate efficiency. Most obviously, the most capable model attracts attention, prestige, and strategic value: the organization that releases the leading system often becomes the focal point of public and industry attention, and that visibility can have important downstream consequences. At the same time, raw capability is frequently reusable. The capabilities of a frontier model can later be transferred into cheaper systems through distillation into smaller models, through additional training phases that reward concision or efficiency, or through the generation of synthetic data for training stronger future base models. In this sense, even a model that is inefficient at release may still be highly valuable as an intermediate technological artifact. It is therefore not anomalous that the first model to establish a new capability frontier may display a relatively poor capabilities-per-dollar ratio, since the incentives facing frontier labs often make such an outcome entirely rational.</p>
+
+
+
+
+      <h1>What METR Measures and What It May Miss</h1>
+
+<!--       <h2>What is measuring METR</h2> -->
+      <p>METR is measuring whether and when AI systems might threaten catastrophic harm to society, primarily through its task-completion time horizon, which measures the length of tasks that models can complete with 50% and 80% success rates. To estimate this, METR equips each model with a budget large enough to allow extensive search over possible solutions. As a result, the budget-independent 50% time horizon primarily captures raw capability, rather than capability per token or capability per dollar.</p>
+
+<!--       <h2>A Selection Effect in the Models METR Evaluates</h2> -->
+      <p>This brings us to what I think is the central issue: the set of models evaluated by METR is not a random sample of all models with a given capability level. Because evaluations are expensive, METR assesses only the most capable model available at any given time.</p>
+
+      <p>Once a frontier model is released and evaluated by METR, later models trained with better algorithms, better data, or more efficient software achieving similar performance at much lower cost don't receive the same level of public attention and are less likely to be evaluated by METR. As a result, models with high capabilities-per-dollar ratios may be systematically underrepresented in the set of models used to infer the relationship between capability and minimal hourly cost.</p>
+
+
+
+      <h1>At constant capability, price is decreasing</p1>
+
+      <h2>Estimating Minimal Hourly Cost for more models</h2>
+      <p>Toby Ord’s analysis relies on data from the <a href="https://evaluations.metr.org/gpt-5-report/">METR GPT-5 report</a>. Only a small subset of the models METR has evaluated is included in this report. Ideally, we would like to replicate the results of the report and add all models ever evaluated by METR.</p>
+      <p>Unfortunately, METR does not provide access to per-task costs for all evaluated models. But we do have access to <code>token_counts</code>, and using the same technique described in <a href=https://blog.redwoodresearch.org/p/ais-capability-improvements-havent>Anders Cairns Woodruff's post</a>, we can infer an estimated generation cost from API prices. This estimation is imperfect because we do not know exactly what <code>token_counts</code> measures, whether it includes both input and output tokens, or what the proportion of each is. In addition, it is unclear whether the generation cost used in the METR report is based on official API prices, so our estimated cost of generation may differ from their cost of generation.</p>
+
+      <!--<p>for several reasons:</p>
+      <ul>
+        <li>We do not know exactly what <code>token_counts</code> means in <code>data/raw/run.json</code>, so we cannot infer generation price from API prices with confidence.</li>
+        <li>We also do not know precisely what <code>generation_cost</code> means when the value is available (for example, for GPT-4 0314 and o1 preview). Is it GPU-hour cost, the price METR paid for API access, or something else?</li>
+        <li>As a result, we cannot construct an estimated generation cost that would be meaningfully comparable to METR’s cost notion.</li>
+      </ul>
+      <p>As explained above, we are not able to evaluate additional models in the same way. But RE-Bench provides some suggestive evidence in the relevant direction.</p>-->
+      <section class="chart-block" aria-label="Budget-conditioned 50 percent time horizon curves">
+        <div class="controls budget-controls">
+          <details class="models-toggle experiment-toggle" id="budget-experiment-toggle">
+            <summary id="budget-experiment-summary">Time Horizon 1.1 (Current)</summary>
+            <div class="models-panel experiment-panel">
+              <button type="button" class="experiment-option" data-experiment-value="1.1">Time Horizon 1.1 (Current)</button>
+              <button type="button" class="experiment-option" data-experiment-value="1.0">Time Horizon 1.0 (Mar 2025)</button>
+            </div>
+          </details>
+
+          <details class="models-toggle experiment-toggle" id="budget-x-axis-toggle">
+            <summary id="budget-x-axis-summary">$</summary>
+            <div class="models-panel experiment-panel">
+              <button type="button" class="experiment-option x-axis-option" data-x-axis-value="usd">$</button>
+              <button type="button" class="experiment-option x-axis-option" data-x-axis-value="tokens">Tokens</button>
+            </div>
+          </details>
+
+          <details class="models-toggle">
+            <summary>Models</summary>
+            <div class="models-panel">
+              <div class="model-actions">
+                <button type="button" id="budget-select-all-models">Select all</button>
+                <button type="button" id="budget-clear-all-models">Clear all</button>
+              </div>
+              <div class="model-list" id="budget-model-list"></div>
+            </div>
+          </details>
+        </div>
+
+        <p class="graph-title">Budget-conditioned 50% time horizon</p>
+
+        <div class="chart-wrapper">
+          <svg id="budget-curves-chart" class="budget-chart-svg" viewBox="0 0 900 560" role="img" aria-label="Budget-conditioned 50 percent time horizon curves"></svg>
+          <div class="tooltip" id="budget-curves-tooltip"></div>
+        </div>
+
+        <p class="budget-summary" id="budget-selection-summary"></p>
+        <div class="budget-legend" id="budget-chart-legend"></div>
+        <p class="chart-caption">Each line is one model’s budget-conditioned 50% time horizon curve. The x-axis can be shown either as allowed per-run budget in dollars or as the corresponding token count, while the y-axis is the resulting 50% time horizon. Both axes use logarithmic spacing, matching the METR-style plot. Use the controls above to switch between TH 1.0 and TH 1.1, between dollars and tokens, and to choose which models to display.</p>
+      </section>
+
+      <p class="note"><strong>Note:</strong> the data Ord’s analysis relies on are now deprecated. They come from Time Horizon 1.0 rather than Time Horizon 1.1, which was released in January 2026.</p>
+      <p>When we examine the models included in the GPT-5 Report used for Ord’s analysis, we still find that the minimum hourly cost rises for newer, more capable models. However, because our estimate of generation cost behaves strangely for short tasks, focusing on the minimum hourly cost may be less informative than examining the hourly cost at durations where the estimates behave as expected.</p>
+      <p>When we include the additional models in the analysis, the original trend no longer appears to hold. At the same time, the expanded set still consists almost entirely of frontier models from OpenAI and Anthropic, plus one model from Google, rather than a broad sample of low-cost models. This raises the possibility that extending the analysis to a wider range of models, including Chinese open-source models, would reveal an even clearer pattern in the opposite direction. Finally, because our cost estimates are inferred from token counts and API pricing, they are necessarily approximate. It would therefore be valuable to revisit this question using more reliable cost data across a much broader set of models.</p>
+      <p>One can also view the same budget-conditioned time horizon curves in token space rather than dollar space. On that representation, the overall picture is similar: the more capable models, which achieve longer time horizons, generally appear to require fewer tokens per hour of capability than older models whose performance is concentrated on shorter tasks. In other words, even when we abstract away from pricing and look only at token expenditure, the frontier does not obviously look less efficient. If anything, the token-conditioned view suggests that capability improvements have often been accompanied by reductions in the number of tokens needed to sustain a given level of task performance.</p>
+
+      <h2>Suggestive Evidence from RE-Bench</h2>
+      <p>RE-Bench provides some suggestive evidence in the same direction. RE-Bench is part of METR’s broader evaluation framework and includes a large set of models. Although RE-Bench alone does not provide enough information to estimate full 50% time horizons or infer minimal hourly costs for every model, it does provide average cost and average tokens per problem.</p>
+      <p>This allows us to examine the evolution of the average cost per problem among classes of models that reach a given capability threshold. The graph below uses RE-Bench data and plots cost per problem against model release date for models whose resolved rate exceeds a chosen threshold, where a model’s resolved rate is the percentage of benchmark problems it successfully solves.</p>
+
+      <section class="chart-block" aria-label="Cost per problem over time for selected models">
+        <div class="controls">
+          <div class="options-row">
+            <label><input id="log-scale-toggle" type="checkbox" /> Log scale</label>
+            <label><input id="labels-toggle" type="checkbox" checked /> Show labels</label>
+            <label><input id="frontier-toggle" type="checkbox" checked /> Highlight frontier</label>
+          </div>
+
+          <details class="models-toggle">
+            <summary>Models</summary>
+            <div class="models-panel">
+              <div class="model-actions">
+                <button type="button" id="select-all-models">Select all</button>
+                <button type="button" id="clear-all-models">Clear all</button>
+                <button type="button" id="models-above-threshold">Select all above threshold</button>
+              </div>
+              <div class="model-list" id="model-list"></div>
+            </div>
+          </details>
+        </div>
+
+        <p class="graph-title" id="cost-chart-title">Cost per problem for models above a 50% resolved-rate threshold</p>
+
+        <div class="chart-wrapper">
+          <svg id="cost-chart" viewBox="0 0 900 560" role="img" aria-label="Cost per problem over time for selected models"></svg>
+          <div class="tooltip" id="chart-tooltip"></div>
+        </div>
+
+        <div class="control-panel">
+          <h4>Resolved rate threshold</h4>
+          <div class="slider-row">
+            <input id="threshold-slider" type="range" min="30" max="65" step="5" value="50" />
+            <div class="threshold-value" id="threshold-value">50%</div>
+          </div>
+        </div>
+
+        <p class="summary" id="selection-summary"></p>
+
+        <div class="color-scale" aria-label="Resolved rate color scale">
+          <div class="color-scale-label">Resolved rate</div>
+          <div class="gradient-bar" aria-hidden="true"></div>
+          <div class="color-scale-ticks">
+            <span id="resolved-rate-min-label">33.3%</span>
+            <span id="resolved-rate-mid-label">49.3%</span>
+            <span id="resolved-rate-max-label">65.3%</span>
+          </div>
+        </div>
+
+        <p class="chart-caption">Points show selected models whose resolved rate is strictly above the chosen threshold. Hover points for details. The highlighted frontier marks the cheapest selected model available so far at each date. The x-axis and y-axis ranges are fixed across selections to keep visual comparisons stable.</p>
+      </section>
+
+      <p>On this measure, the pattern runs in the opposite direction from the one emphasized in Ord’s analysis: once we look beyond a small set of frontier models, the cost of reaching a given capability level appears to fall rather than rise with model release date. If models with the same resolved rate tend, on average, to succeed and fail on similar kinds of tasks, and if longer tasks are generally harder and therefore have lower success rates, then a fixed resolved-rate threshold can be treated as a rough proxy for a fixed time horizon. Under those assumptions, the RE-Bench data suggest not only that later models are cheaper at a given capability level, but also that the hourly cost of that capability is likely decreasing over time. It could still be true that some frontier models that first unlock new capability levels have unusually high hourly costs, but the data from RE-Bench and my estimatons from METR suggest that those initial frontier costs are outweighed by the later price reductions produced by more efficient follow-up models.</p>
+
+      <!--<p>Since many more models are being analyzed here, this does not directly refute Ord’s observation. Rather, it suggests that two different facts may coexist. On the one hand, frontier models at the time of their release may indeed have high minimal hourly costs. On the other hand, the cost of achieving a fixed capability level may still decline over time as more efficient follow-up models appear.</p>
+
+      <h2>A More Nuanced Interpretation</h2>
+      <p>The broader lesson, then, may be more nuanced than the original framing suggests.</p>
+      <p>It may be true that, within the set of prominent frontier models evaluated by METR, greater raw capability is associated with higher minimal hourly cost. But this does not imply that capability itself is intrinsically becoming more expensive. A more plausible interpretation is that frontier models are initially optimized for maximum raw performance, while more cost-efficient models achieving similar capability arrive later and receive less attention in public evaluation.</p>
+      <p>If that is right, then the observed relationship between capability and minimal hourly cost should be interpreted with caution. It may tell us something real about the priorities of frontier labs and the composition of the public benchmark set, without telling us that the long-run economics of useful AI are necessarily worsening.</p>
+
+      <h2>How to understand Toby Ord's pattern?</h2>
+
+      <p>Ord’s empirical observation can now be stated clearly: in <a href="https://evaluations.metr.org/gpt-5-report/">METR GPT-5 report's'</a> data, more capable models also tend to have higher minimal hourly costs. If this continues, increasingly capable models could eventually cost more per hour than human labor on long tasks.</p>
+      <p>The main limitation of this analysis is not the pattern itself, but how it is interpreted. The models in the GPT-5 report should not be treated as a random sample of all models. They are a small and highly selected set of frontier models, produced by organizations pursuing particular objectives. That makes it risky to infer a general relationship between capability and minimal hourly cost from this sample alone.</p>
+
+      <p>This biased sample suggests that the trend observed in METR’s data may partly reflect the sociology and economics of the frontier-model ecosystem rather than a fundamental law of scaling. METR’s evaluated models are highly visible models optimized for frontier capability. They are not necessarily the models that best characterize the cost of achieving a given level of capability once the broader ecosystem has had time to catch up.</p>
+      <p>Put differently, the claim “the most capable models at the moment of release tend to be expensive” is much weaker—and much more plausible—than the claim “higher capability is inherently becoming more expensive.”</p>
+
+      <h2>Conclusion</h2>
+      <p>Ord’s analysis points to a real empirical pattern in METR’s evaluations: more capable models tend to have higher minimal hourly costs. But the significance of that pattern depends on how we interpret the benchmark.</p>
+      <p>METR is primarily measuring raw capability under generous budgets, not cost-efficiency. At the same time, the models that receive the most attention and are most likely to be evaluated are precisely those optimized for frontier performance rather than for capabilities per dollar. This creates a plausible selection effect: inefficient frontier models are highly visible, while cheaper models reaching similar capability later are less visible and may go unevaluated.</p>
+      <p>For that reason, the evidence currently available may be more consistent with the following claim than with a strong version of Ord’s thesis: the first models to achieve a new capability frontier are often expensive, but the cost of achieving that capability need not remain high for long.</p>-->
+
+      <h1>Conclusion</h1>
+
+      <p>Ord’s analysis identifies a real empirical pattern in METR’s evaluated data: among the prominent frontier models included in the GPT-5 report, more capable models tend also to have higher minimal hourly costs. If that relationship were to persist, it would imply that increasingly capable models could eventually become more expensive per hour than human labor on long tasks.</p>
+
+      <p>However, this pattern should be interpreted carefully. The evaluated models should not be treated as a random or representative sample of all models. They are a small, highly selected set of visible frontier systems produced by organizations primarily optimizing for maximum raw performance. As a result, the observed relationship may reflect the priorities of frontier labs and the composition of the public benchmark set as much as any deeper economic tendency.</p>
+
+      <p>This makes it risky to infer from METR’s benchmark that higher capability is inherently becoming more expensive. A more plausible interpretation is that the first models to reach a new capability frontier are often expensive because they are optimized for peak capability rather than cost-efficiency. Later, more efficient follow-up models may achieve similar capability at lower cost, while receiving less public attention and being less likely to appear in widely discussed evaluations.</p>
+
+      <p>METR therefore seems better understood as measuring raw capability under generous budgets than as measuring capability per dollar. Under that interpretation, the benchmark can reveal something real about frontier-model economics at the moment of release, without showing that the long-run economics of useful AI are worsening. The strongest conclusion supported by the evidence is not that capability itself is becoming durably more costly, but that frontier capability is often expensive at first, even though the cost of achieving that same capability level may still decline over time as the broader ecosystem catches up.<p/>
+
+      <p class="back"><a href="../index.html">← Back to home</a></p>
+    </article>
+  </main>
+
+  <script src="data/coding-capabilities-budget-curves.js"></script>
+  <script src="coding-capabilities-progress.js"></script>
+</body>
+</html>
