@@ -213,3 +213,29 @@
         font-size: 1.6rem;
       }
     }
+
+    .legend {
+      font-size: 0.9rem;
+      margin-top: -0.75rem;
+    }
+
+    .legend .sw {
+      display: inline-block;
+      width: 0.9rem;
+      height: 0.9rem;
+      border: 1px solid var(--border);
+      vertical-align: -0.12rem;
+      margin: 0 0.3rem 0 0.8rem;
+    }
+
+    .legend .item {
+      white-space: nowrap;
+    }
+
+    .legend .sw.p { background: #ffffff; }
+    .legend .sw.m { background: #eeeeee; }
+    .legend .sw.i { background: #d4d4d4; }
+
+    .legend .unit {
+      color: var(--muted);
+    }
