@@ -239,3 +239,9 @@
     .legend .unit {
       color: var(--muted);
     }
+
+    table.grid th .u {
+      font-weight: 400;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
